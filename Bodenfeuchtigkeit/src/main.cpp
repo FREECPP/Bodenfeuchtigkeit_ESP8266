@@ -17,6 +17,7 @@
   //unsigned long general_time;
   //unsigned long wait_parameter = 3600000;
   unsigned long last_time_value = 0;
+  
 
 const char* ssid = "KitchenscalledHeike";
 const char* password = "72609587735722940947";
@@ -88,7 +89,8 @@ void sensor_messaging_logic(float moisture_in_percent, float notification_border
   delay(100);
 }
 
-void test_sensor(unsigned long wait_parameter, unsigned long last_time_value, bool whatsapp_flag){
+unsigned long test_sensor(unsigned long wait_parameter, unsigned long last_time_value, bool whatsapp_flag){
+
   unsigned long general_time = millis();
   String test_message = "Bodenfeuchtigkeit in %: " + String(moisture_in_percent);
   // logic
@@ -102,7 +104,7 @@ void test_sensor(unsigned long wait_parameter, unsigned long last_time_value, bo
     }
     
   }
-
+  return last_time_value;
   delay(100);
 
 }
@@ -177,7 +179,7 @@ void loop(){
   */
 
   
-  test_sensor(six_hours, last_time_value, true);
+  last_time_value = test_sensor(6000, last_time_value, false);
 
 
 
