@@ -2,6 +2,8 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 #include <UrlEncode.h>
+#include "SendMessage.h"
+#include "SensorTest.h"
 
 
 #define LEDPIN 0
@@ -27,7 +29,8 @@ const char* password = "72609587735722940947";
 String phoneNumber = "+4915143174933";
 String apiKey = "8841819";
 
-void sendMessage(String message){
+/*
+void sendMessage(String message, String phoneNumber, String apiKey){
 
   // Data to send with HTTP POST
   String url = "http://api.callmebot.com/whatsapp.php?phone=" + phoneNumber + "&apikey=" + apiKey + "&text=" + urlEncode(message);
@@ -52,7 +55,7 @@ void sendMessage(String message){
   // Free resources
   http.end();
 }
-
+*/
 //  Functions
 float measured_value_in_percent(float bound_dry, float bound_water){
       float interval = (bound_dry - bound_water) / 100;
@@ -70,7 +73,7 @@ void sensor_messaging_logic(float moisture_in_percent, float notification_border
     Serial.println(moisture_counter);
     if(moisture_counter >= moisture_counter_border && moisture_flag == false){
       moisture_flag = true;
-      sendMessage("Die Testpflanze muss gegossen werden");
+      sendMessage("Die Testpflanze muss gegossen werden",phoneNumber, apiKey);
     }
   }
   else if(moisture_in_percent > notification_border){
@@ -88,8 +91,8 @@ void sensor_messaging_logic(float moisture_in_percent, float notification_border
 
   delay(100);
 }
-
-unsigned long test_sensor(unsigned long wait_parameter, unsigned long last_time_value, bool whatsapp_flag){
+/*
+unsigned long test_sensor(unsigned long wait_parameter, unsigned long last_time_value, bool whatsapp_flag, float moisture_in_percent){
 
   unsigned long general_time = millis();
   String test_message = "Bodenfeuchtigkeit in %: " + String(moisture_in_percent);
@@ -108,7 +111,7 @@ unsigned long test_sensor(unsigned long wait_parameter, unsigned long last_time_
   delay(100);
 
 }
-
+*/
 void setup() {
   Serial.begin(9600);
 
@@ -123,7 +126,7 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   // Send Message to WhatsAPP
-  sendMessage("ESP8266 Initialized!");
+  sendMessage("ESP8266 Initialized!", phoneNumber, apiKey);
 
   // Pinout 
   pinMode(LEDPIN, OUTPUT);
@@ -179,7 +182,7 @@ void loop(){
   */
 
   
-  last_time_value = test_sensor(6000, last_time_value, false);
+  last_time_value = test_sensor(6000, last_time_value, false, moisture_in_percent, phoneNumber, apiKey);
 
 
 
